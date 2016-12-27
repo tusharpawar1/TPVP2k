@@ -2,6 +2,8 @@ package org.pawars.algotrading.dto;
 
 import java.util.Date;
 
+import org.pawars.algotrading.utilities.Utility;
+
 public class Rate {
 
 	private double low = 0;
@@ -17,9 +19,10 @@ public class Rate {
 	private double support2 = 0;
 	private double support3 = 0;
 	private double previousDayClose = 0;
+	private double percChange = 0;
 	private Date timestamp = null;
 	private Rate refToPrevious = null;
-
+	
 	public Rate() {
 	
 	}
@@ -32,7 +35,7 @@ public class Rate {
 		this.timestamp = timestamp;
 		
 	}
-	public Rate(double low, double high, double close, double open, int volume, Date timestamp, Rate previousRate) {
+	public Rate(double low, double high, double close, double open, int volume, Date timestamp, double percChange, Rate previousRate) {
 		this.low = low;
 		this.high = high;
 		this.close = close;
@@ -41,7 +44,7 @@ public class Rate {
 		this.timestamp = timestamp;
 		this.previousDayClose = previousRate.getClose();
 		this.refToPrevious = previousRate;
-		
+		this.percChange = percChange;
 	}
 	
 	public double getLow() {
@@ -77,7 +80,7 @@ public class Rate {
 	}
 
 	public Date getTimestamp() {
-		return timestamp;
+		return new Date(timestamp.getTime());
 	}
 
 	public void setTimestamp(Date timestamp) {
@@ -94,25 +97,25 @@ public class Rate {
 
 	public void calculate() {
 		pivot = (high + low + previousDayClose) / 3;
-		pivot = Math.round(pivot*100)/100.0d;
+		pivot = Utility.convertDecimal(pivot);
 		
 		resistance1 = (2 * pivot) - low;
-		resistance1 = Math.round(resistance1*100)/100.0d;
+		resistance1 = Utility.convertDecimal(resistance1);
 		
 		support1 = (2 * pivot) - high;
-		support1 = Math.round(support1 *100)/100.0d;
+		support1 = Utility.convertDecimal(support1 );
 		
 		resistance2 = pivot + (high - low);
-		resistance2 = Math.round(resistance2 *100)/100.0d;
+		resistance2 = Utility.convertDecimal(resistance2 );
 		
 		support2 = pivot - (high - low);
-		support2 = Math.round(support2 *100)/100.0d;
+		support2 = Utility.convertDecimal(support2 );
 		
 		resistance3 = high + 2 * (pivot - low);
-		resistance3 = Math.round(resistance3 *100)/100.0d;
+		resistance3 = Utility.convertDecimal(resistance3 );
 		
 		support3 = low - 2 * (high - pivot);
-		support3 = Math.round(support3 *100)/100.0d;
+		support3 = Utility.convertDecimal(support3 );
 		
 		
 	}
@@ -157,6 +160,7 @@ public class Rate {
 		return "Rate [low=" + low + ", high=" + high + ", close=" + close + ", open=" + open + ", volume=" + volume
 				+ ", pivot=" + pivot + ", resistance3=" + resistance3 + ", resistance2=" + resistance2
 				+ ", resistance1=" + resistance1 + ", support1=" + support1 + ", support2=" + support2 + ", support3="
-				+ support3 + ", previousDayClose=" + previousDayClose + ", timestamp=" + timestamp + "]";
+				+ support3 + ", previousDayClose=" + previousDayClose + ", percChange=" + percChange + ", timestamp="
+				+ timestamp + "]";
 	}
 }

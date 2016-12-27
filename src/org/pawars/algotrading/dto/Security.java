@@ -1,5 +1,6 @@
 package org.pawars.algotrading.dto;
 
+import java.util.Date;
 import java.util.List;
 
 import org.pawars.algotrading.utilities.Utility;
@@ -10,10 +11,13 @@ public class Security {
 	private String symbol = "NOT DEFINED";
 	private double currPrice = 0;
 	private String companyName = "";
-	private double lowestPrice = 0;
-	private double highestPrice = 0;
+	private double currLowestPrice= 0;
+	private double currHighestPrice = 0;
 	private double W52lowest = 0;
+	private Date W52LowDate = null;
 	private double W52highest = 0;
+	private Date W52HighDate = null;
+	private double W52HighLowDaysRatio = 0;
 	private double currDayOpen = 0;
 	private double prevDayClose = 0;
 	private double resistance3 = 0;
@@ -30,10 +34,48 @@ public class Security {
 	private double movingAvgDay100 = 0;
 	private double movingAvgDay200 = 0;
 	private List<Rate> RateSeries = null;
-
+	private Rate latestRate = null;
+	private Date lastUpdatedTimestamp = null;
 	public Security(String Symbol) {
 		this.symbol = Symbol;
 		getRateList();
+		latestRate = RateSeries.get(RateSeries.size()-1);
+		populateValuesFromLatestRate(latestRate);
+		calculate52WHighandLow();
+		calculateMovingAvgs();
+	}
+
+	private void calculateMovingAvgs() {
+		movingAvgDay5 = Utility.convertDecimal(getLastNDaysClosingPrice(latestRate,5,0)/5);
+		movingAvgDay10 = Utility.convertDecimal(getLastNDaysClosingPrice(latestRate,10,0)/10);
+		movingAvgDay20 = Utility.convertDecimal(getLastNDaysClosingPrice(latestRate,20,0)/20);
+		movingAvgDay50 = Utility.convertDecimal(getLastNDaysClosingPrice(latestRate,50,0)/50);
+		movingAvgDay100 = Utility.convertDecimal(getLastNDaysClosingPrice(latestRate,100,0)/100);
+		movingAvgDay200 = Utility.convertDecimal(getLastNDaysClosingPrice(latestRate,200,0)/200);
+		
+	}
+
+	private double getLastNDaysClosingPrice(Rate latestRate2, int iDays, double offsetValue) {
+		if(iDays<=0){
+			return offsetValue;
+		}
+		offsetValue = getLastNDaysClosingPrice(latestRate2.getRefToPrevious(), iDays-1, (latestRate2.getClose() +offsetValue));
+		return offsetValue;
+	}
+
+	private void populateValuesFromLatestRate(Rate rate) {
+
+		this.currPrice = rate.getClose();
+		this.currHighestPrice = rate.getHigh();
+		this.currLowestPrice = rate.getLow();
+		this.currDayOpen = rate.getOpen();
+		this.support1 = rate.getSupport1();
+		this.support2 = rate.getSupport2();
+		this.support3 = rate.getSupport3();
+		this.resistance1 = rate.getResistance1();
+		this.resistance2 = rate.getResistance2();
+		this.resistance3 = rate.getResistance3();
+		this.lastUpdatedTimestamp = rate.getTimestamp();
 	}
 
 	private void getRateList() {
@@ -69,19 +111,19 @@ public class Security {
 	}
 
 	public double getLowestPrice() {
-		return lowestPrice;
+		return currLowestPrice;
 	}
 
 	public void setLowestPrice(double lowestPrice) {
-		this.lowestPrice = lowestPrice;
+		this.currLowestPrice = lowestPrice;
 	}
 
 	public double getHighestPrice() {
-		return highestPrice;
+		return currHighestPrice;
 	}
 
 	public void setHighestPrice(double highestPrice) {
-		this.highestPrice = highestPrice;
+		this.currHighestPrice = highestPrice;
 	}
 
 	public double getW52lowest() {
@@ -252,32 +294,72 @@ public class Security {
 	@Override
 	public String toString() {
 		return "Security [symbol=" + symbol + ", currPrice=" + currPrice + ", companyName=" + companyName
-				+ ", lowestPrice=" + lowestPrice + ", highestPrice=" + highestPrice + ", W52lowest=" + W52lowest
-				+ ", W52highest=" + W52highest + ", currDayOpen=" + currDayOpen + ", prevDayClose=" + prevDayClose
-				+ ", resistance3=" + resistance3 + ", resistance2=" + resistance2 + ", resistance1=" + resistance1
-				+ ", pivotPoint=" + pivotPoint + ", support1=" + support1 + ", support2=" + support2 + ", support3="
-				+ support3 + ", movingAvgDay5=" + movingAvgDay5 + ", movingAvgDay10=" + movingAvgDay10
+				+ ", lowestPrice=" + currLowestPrice + ", highestPrice=" + currHighestPrice + ", W52lowest=" + W52lowest
+				+ ", W52LowDate=" + W52LowDate + ", W52highest=" + W52highest + ", W52HighDate=" + W52HighDate
+				+ ", W52HighLowDaysRatio=" + W52HighLowDaysRatio + ", currDayOpen=" + currDayOpen + ", prevDayClose="
+				+ prevDayClose + ", resistance3=" + resistance3 + ", resistance2=" + resistance2 + ", resistance1="
+				+ resistance1 + ", pivotPoint=" + pivotPoint + ", support1=" + support1 + ", support2=" + support2
+				+ ", support3=" + support3 + ", movingAvgDay5=" + movingAvgDay5 + ", movingAvgDay10=" + movingAvgDay10
 				+ ", movingAvgDay20=" + movingAvgDay20 + ", movingAvgDay50=" + movingAvgDay50 + ", movingAvgDay100="
-				+ movingAvgDay100 + ", movingAvgDay200=" + movingAvgDay200 + ", RateSeries=" + RateSeries + "]";
+				+ movingAvgDay100 + ", movingAvgDay200=" + movingAvgDay200 + "]";
 	}
 
 	public void calculate52WHighandLow(){
 		int iMaxworkingDays = getRateSeries().size() <250 ? getRateSeries().size() : 250;
-		double TempHigh = 0;
-		double TempLow = 9999999;
-		for (Rate r: RateSeries){
-			if(r.getHigh() > TempHigh){
-				TempHigh=r.getHigh();
-			}
-			if(r.getLow() < TempLow){
-				TempLow=r.getLow();
-			}
-		}
-		W52highest = TempHigh;
-		W52lowest = TempLow;
 		
+		Rate dummy = new Rate(99999999, 0, 0, 0, 0, null);
+		dummy = RecursiveSearch52WHighLow(RateSeries.get(getRateSeries().size() -1), dummy, iMaxworkingDays);
+		W52highest = dummy.getHigh();
+		W52lowest = dummy.getLow();
+		calcW52HighLowDaysRatio();
 		System.out.println("52Whigh = " + W52highest + ", 52WLow = "+ W52lowest);
 		
 	}
+	
+	private Rate RecursiveSearch52WHighLow (Rate tempRate, Rate dummy, int iMaxCount){
+		if(iMaxCount < 0){
+			return dummy;
+		}
+		
+		if(tempRate.getHigh() > dummy.getHigh()){
+			dummy.setHigh(tempRate.getHigh());
+			this.W52HighDate = tempRate.getTimestamp();
+		}
+		if(tempRate.getLow() < dummy.getLow() && tempRate.getLow() > 0 ){
+			dummy.setLow(tempRate.getLow());
+			this.W52LowDate = tempRate.getTimestamp();
+		}
+		dummy = RecursiveSearch52WHighLow(tempRate.getRefToPrevious(), dummy, iMaxCount-1);
+		
+		return dummy;
+	}
+	
+	private void calcW52HighLowDaysRatio(){
+		
+		int HighdaysDiff = calcDaysDiff(W52HighDate);
+		int LowdaysDiff = calcDaysDiff(W52LowDate);
+		
+		W52HighLowDaysRatio = Utility.convertDecimal(Math.log10((HighdaysDiff*100)/(LowdaysDiff <= 0?1: LowdaysDiff)));
+		
+	}
+	private int calcDaysDiff(Date startDate){
+		long startTime = startDate.getTime();
+		long endTime = (new Date()).getTime();
+		long diffTime = endTime - startTime;
+		long diffDays = diffTime / (1000 * 60 * 60 * 24);
+	
+		return (int) diffDays;
+	}
 
+	public double getW52HighLowDaysRatio() {
+		return W52HighLowDaysRatio;
+	}
+
+	public Date getLastUpdatedTimestamp() {
+		return lastUpdatedTimestamp;
+	}
+
+	public void setLastUpdatedTimestamp(Date lastUpdatedTimestamp) {
+		this.lastUpdatedTimestamp = lastUpdatedTimestamp;
+	}
 }
