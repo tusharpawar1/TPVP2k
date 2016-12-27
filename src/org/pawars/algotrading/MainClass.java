@@ -20,6 +20,13 @@ public class MainClass {
 		for(String strSec : Securities){
 			lstSecurities.add(new Security(strSec));
 		}
+		for(Security tmp : lstSecurities){
+			System.out.println(tmp.getSymbol());
+			System.out.println(tmp.getW52highest());
+			System.out.println(tmp.getW52lowest());
+			System.out.println(tmp.getW52HighLowDaysRatio());
+			System.out.println("---------------------------------");
+		}
 		
 		System.out.println("I am here");
 				
