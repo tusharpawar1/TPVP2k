@@ -7,7 +7,7 @@
     <!-- bean definitions here -->
 
 <bean id="masterConn"
-        class="org.pawars.algotrading.MasterConnect">
+        class="org.pawars.algotrading.connectivity.MasterConnect">
     
 </bean>
 </beans>

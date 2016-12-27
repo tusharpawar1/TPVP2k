@@ -1,5 +1,11 @@
 package org.pawars.algotrading.dto;
 
+import java.util.List;
+
+import org.pawars.algotrading.utilities.Utility;
+
+
+
 public class Security {
 	private String symbol = "NOT DEFINED";
 	private double currPrice = 0;
@@ -23,10 +29,19 @@ public class Security {
 	private double movingAvgDay50 = 0;
 	private double movingAvgDay100 = 0;
 	private double movingAvgDay200 = 0;
-	
+	private List<Rate> RateSeries = null;
+
 	public Security(String Symbol) {
 		this.symbol = Symbol;
-	
+		getRateList();
+	}
+
+	private void getRateList() {
+		try{
+			RateSeries = Utility.getRates(symbol);
+		}catch(Exception ex){
+			System.out.println(ex);
+		}
 	}
 
 	public String getSymbol() {
@@ -229,7 +244,40 @@ public class Security {
 			return false;
 		return true;
 	}
-	
-	
-	
+
+	public List<Rate> getRateSeries() {
+		return RateSeries;
+	}
+
+	@Override
+	public String toString() {
+		return "Security [symbol=" + symbol + ", currPrice=" + currPrice + ", companyName=" + companyName
+				+ ", lowestPrice=" + lowestPrice + ", highestPrice=" + highestPrice + ", W52lowest=" + W52lowest
+				+ ", W52highest=" + W52highest + ", currDayOpen=" + currDayOpen + ", prevDayClose=" + prevDayClose
+				+ ", resistance3=" + resistance3 + ", resistance2=" + resistance2 + ", resistance1=" + resistance1
+				+ ", pivotPoint=" + pivotPoint + ", support1=" + support1 + ", support2=" + support2 + ", support3="
+				+ support3 + ", movingAvgDay5=" + movingAvgDay5 + ", movingAvgDay10=" + movingAvgDay10
+				+ ", movingAvgDay20=" + movingAvgDay20 + ", movingAvgDay50=" + movingAvgDay50 + ", movingAvgDay100="
+				+ movingAvgDay100 + ", movingAvgDay200=" + movingAvgDay200 + ", RateSeries=" + RateSeries + "]";
+	}
+
+	public void calculate52WHighandLow(){
+		int iMaxworkingDays = getRateSeries().size() <250 ? getRateSeries().size() : 250;
+		double TempHigh = 0;
+		double TempLow = 9999999;
+		for (Rate r: RateSeries){
+			if(r.getHigh() > TempHigh){
+				TempHigh=r.getHigh();
+			}
+			if(r.getLow() < TempLow){
+				TempLow=r.getLow();
+			}
+		}
+		W52highest = TempHigh;
+		W52lowest = TempLow;
+		
+		System.out.println("52Whigh = " + W52highest + ", 52WLow = "+ W52lowest);
+		
+	}
+
 }
