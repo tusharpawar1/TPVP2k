@@ -18,7 +18,7 @@ public final class Utility {
 		return Math.round(value*100)/100.0d;
 	}
 	public static List<Rate> getRates(String Symbol) throws Exception{
-		file = new File("C:/Users/TUSHAR/workspace/AlgoTrading/data/" + Symbol + ".txt");
+		file = new File("data/" + Symbol + ".txt");
 		FileReader fr = new FileReader(file);
 		BufferedReader br = new BufferedReader(fr);
 		DateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");

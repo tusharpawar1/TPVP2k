@@ -9,4 +9,6 @@ public class Constant {
 	public static final int DURATION_1DAY = 1440;
 	public static final int DURATION_1WEEK = 10080;
 	public static final int DURATION_1MONTH = 43200;
+	public static final int PROFIT = 20;
+	public static final int LOSS =10;
 }

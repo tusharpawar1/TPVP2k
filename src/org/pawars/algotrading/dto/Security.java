@@ -3,6 +3,7 @@ package org.pawars.algotrading.dto;
 import java.util.Date;
 import java.util.List;
 
+import org.pawars.algotrading.constants.Constant;
 import org.pawars.algotrading.utilities.Utility;
 
 
@@ -43,6 +44,20 @@ public class Security {
 		populateValuesFromLatestRate(latestRate);
 		calculate52WHighandLow();
 		calculateMovingAvgs();
+		calculateRSI14();
+	}
+
+	private void calculateRSI14() {
+		
+		getNdaysProfitLossPerc(latestRate,14, Constant.PROFIT);
+	}
+	
+
+	private void getNdaysProfitLossPerc(Rate latestRate2, int iDays, int profit) {
+		if(iDays <= 0){
+			
+		}
+		
 	}
 
 	private void calculateMovingAvgs() {
