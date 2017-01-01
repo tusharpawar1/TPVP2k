@@ -6,8 +6,13 @@
 
     <!-- bean definitions here -->
 
-<bean id="masterConn"
+<!-- <bean id="masterConn"
         class="org.pawars.algotrading.connectivity.MasterConnect">
+    
+</bean>
+ -->
+<bean id="dbConn"
+        class="org.pawars.algotrading.connectivity.DBConnect">
     
 </bean>
 </beans>

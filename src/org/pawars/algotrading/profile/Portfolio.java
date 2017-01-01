@@ -14,7 +14,6 @@ public class Portfolio {
 		loadLstOfPosIds();
 	}
 	private void loadLstOfPosIds() {
-		// TODO Auto-generated method stub
 		
 	}
 	public List<Position> getPositions() {
