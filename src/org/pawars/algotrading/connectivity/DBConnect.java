@@ -5,11 +5,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DBConnect {
-	Connection Conn = null;
-	Statement stmt = null;
+	private Connection Conn = null;
+	private Statement stmt = null;
 	private String Create_SQL_0 = "select * from at_historical_daily where 1=2;";
 	private String Create_SQL_1 = "create table at_historical_daily("
-			+ "pk_id int PRIMARY KEY not null, "
+			+ "pk_id INTEGER PRIMARY KEY , "
 			+ "symbol varchar(10) not null, "
 			+ "low double not null,"
 			+ "high double not null,"
@@ -19,6 +19,8 @@ public class DBConnect {
 			+ "timestamp datetime null,"
 			+ "change double null);";
 	private String Create_SQL_2 = "drop table at_historical_monthly;";
+	
+
 	public DBConnect() {
 		DBinit();
 		
@@ -26,14 +28,11 @@ public class DBConnect {
 	public void OneTimeSetup() {
 		try{ 
 			stmt.executeUpdate(Create_SQL_0);		}catch(SQLException ex){ System.out.println(ex);		try{ 
-			stmt.executeUpdate(Create_SQL_1);		}catch(SQLException ex1){}
+			stmt.executeUpdate(Create_SQL_1);		}catch(SQLException ex1){ 
+				System.out.println(ex);}
 		}
-/*		try{ 
-			stmt.executeUpdate(Create_SQL_2);	
-		}catch(SQLException ex){	
-			System.out.println(ex);	
-		}
-*/	}
+	
+	}
 	private void DBinit(){
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -49,6 +48,12 @@ public class DBConnect {
 
 	public void insertRow(String SQLrow) throws SQLException{
 		stmt.executeUpdate(SQLrow);
+	}
+	public Connection getConn() {
+		return Conn;
+	}
+	public Statement getStmt() {
+		return stmt;
 	}
 
 
