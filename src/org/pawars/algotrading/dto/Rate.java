@@ -5,7 +5,7 @@ import java.util.Date;
 import org.pawars.algotrading.utilities.Utility;
 
 public class Rate {
-
+	private int pkID = 0;
 	private double low = 0;
 	private double high = 0;
 	private double close = 0;
@@ -46,7 +46,18 @@ public class Rate {
 		this.refToPrevious = previousRate;
 		this.percChange = percChange;
 	}
-	
+	public Rate(double low, double high, double close, double open, int volume, Date timestamp, double percChange, int PKID, Rate previousRate) {
+		this.low = low;
+		this.high = high;
+		this.close = close;
+		this.open = open;
+		this.volume = volume;
+		this.timestamp = timestamp;
+		this.previousDayClose = previousRate.getClose();
+		this.refToPrevious = previousRate;
+		this.percChange = percChange;
+		this.pkID = PKID;
+	}
 	public double getLow() {
 		return low;
 	}

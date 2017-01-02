@@ -21,7 +21,6 @@ public class MainClass {
 		AbstractApplicationContext factory = new ClassPathXmlApplicationContext("Spring-Beans.xml");
 //		MasterConnect mConn = (MasterConnect)factory.getBean("masterConn");
 		DBConnect dbConn = (DBConnect)factory.getBean("dbConn");
-//		dbConn.insertRow("insert into security (id, symbol) values (1,'SBIN');");
 		 
 		List<Security> lstSecurities = new ArrayList<Security>();
 		for(String strSec : Securities){

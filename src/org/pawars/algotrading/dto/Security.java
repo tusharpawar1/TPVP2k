@@ -95,7 +95,7 @@ public class Security {
 
 	private void getRateList() {
 		try{
-			RateSeries = Utility.getRates(symbol);
+			RateSeries = Utility.parseFileForRate(symbol);
 		}catch(Exception ex){
 			System.out.println(ex);
 		}
