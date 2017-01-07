@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.pawars.algotrading.connectivity.DBConnect;
-import org.pawars.algotrading.constants.Constant;
 import org.pawars.algotrading.utilities.Utility;
 
 
