@@ -11,5 +11,5 @@ public class Constant {
 	public static final int DURATION_1MONTH = 43200;
 	public static final int PROFIT = 20;
 	public static final int LOSS =10;
-	public static final String[] Securities = {"SBIN"};
+	public static final String[] Securities = {"SBIN", "HDFC", "HDBK"};
 }

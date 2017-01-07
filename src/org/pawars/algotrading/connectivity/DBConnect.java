@@ -21,7 +21,7 @@ public class DBConnect {
 	private static Statement stmt = null;
 	private static String insQuery_1 = "insert into at_historical_daily(pk_id,symbol,low,high,close,open,volume,timestamp,change) values "
 			+ "(?,	?,	?,	?,	?,	?,	?,	?,	?)";
-	private static String selQuery_2 = "select pk_id,symbol,low,high,close,open,volume,timestamp,change from at_historical_daily d order by timestamp ;";
+	private static String selQuery_2 = "select pk_id,symbol,low,high,close,open,volume,timestamp,change from at_historical_daily d where symbol = ? order by timestamp ;";
 
 	private String Create_SQL_0 = "select * from at_historical_daily where 1=2;";
 	private String Create_SQL_1 = "create table at_historical_daily("
@@ -104,7 +104,7 @@ public class DBConnect {
 					}
 
 					//					stmt.setInt		(1, iCounter); 
-					stmt.setString	(2, Symbol[0]);
+					stmt.setString	(2, forLoopSymbol);
 					stmt.setDouble	(3, low);
 					stmt.setDouble	(4, high);
 					stmt.setDouble	(5, close);
@@ -136,7 +136,9 @@ public class DBConnect {
 	public static List<Rate> readRateFromDB(String Symbol) throws Exception {
 		List<Rate> Series = new ArrayList<Rate>();
 		Rate previousRate = new Rate();
-		ResultSet rs = stmt.executeQuery(selQuery_2);
+		PreparedStatement pstmt = Conn.prepareStatement(selQuery_2);
+		pstmt.setString(1, Symbol);
+		ResultSet rs = pstmt.executeQuery();
 		while (rs.next()) {
 			
 			Date dt = rs.getDate("timestamp");
