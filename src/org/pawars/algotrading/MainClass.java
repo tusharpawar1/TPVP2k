@@ -30,8 +30,10 @@ public class MainClass {
 			System.out.println(tmp.getSymbol());
 			System.out.println(tmp.getW52highest());
 			System.out.println(tmp.getW52lowest());
+			System.out.println("RSI14 = " + tmp.getRSI14());
 			
 //			insertIntoDB(tmp.getRateSeries());
+			
 			
 			System.out.println(tmp.getW52HighLowDaysRatio());
 			System.out.println("---------------------------------");

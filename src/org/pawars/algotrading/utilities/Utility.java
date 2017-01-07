@@ -62,4 +62,7 @@ public final class Utility {
 	public static void setDbConn(DBConnect dbConn) {
 		dbConnection = dbConn;
 	}
+	public static DBConnect getDbConn() {
+		return dbConnection;
+	}
 }

@@ -3,6 +3,7 @@ package org.pawars.algotrading.dto;
 import java.util.Date;
 import java.util.List;
 
+import org.pawars.algotrading.connectivity.DBConnect;
 import org.pawars.algotrading.constants.Constant;
 import org.pawars.algotrading.utilities.Utility;
 
@@ -34,6 +35,7 @@ public class Security {
 	private double movingAvgDay50 = 0;
 	private double movingAvgDay100 = 0;
 	private double movingAvgDay200 = 0;
+	private double RSI14 =0;
 	private List<Rate> RateSeries = null;
 	private Rate latestRate = null;
 	private Date lastUpdatedTimestamp = null;
@@ -48,15 +50,33 @@ public class Security {
 	}
 
 	private void calculateRSI14() {
+		double avgGain = 0;
+		double avgLoss = 0;
+		int iDays = 14;
+		Rate rateTmp = latestRate;
 		
-		getNdaysProfitLossPerc(latestRate,14, Constant.PROFIT);
-	}
-	
-
-	private void getNdaysProfitLossPerc(Rate latestRate2, int iDays, int profit) {
-		if(iDays <= 0){
+		while(iDays > 0){
+			
+			Double dblLocal = rateTmp.getPercChange();
+			
+			if(dblLocal >0){
+				avgGain = avgGain +dblLocal;
+			}else{
+				avgLoss = avgLoss +dblLocal;
+			}
+			
+			iDays--;
+			rateTmp = rateTmp.getRefToPrevious();
+		}
+		
+		if(avgLoss == 0){
+			RSI14 =100;
+			return ;
 			
 		}
+		avgGain = avgGain/14;
+		avgLoss = -1*avgLoss/14;
+		RSI14 = 100- (100/(1+(avgGain/avgLoss)));
 		
 	}
 
@@ -95,7 +115,8 @@ public class Security {
 
 	private void getRateList() {
 		try{
-			RateSeries = Utility.parseFileForRate(symbol);
+//			RateSeries = Utility.parseFileForRate(symbol);
+			RateSeries = DBConnect.readRateFromDB(this.symbol);
 		}catch(Exception ex){
 			System.out.println(ex);
 		}
@@ -376,5 +397,9 @@ public class Security {
 
 	public void setLastUpdatedTimestamp(Date lastUpdatedTimestamp) {
 		this.lastUpdatedTimestamp = lastUpdatedTimestamp;
+	}
+
+	public double getRSI14() {
+		return Math.round(RSI14);
 	}
 }

@@ -18,7 +18,7 @@ import org.pawars.algotrading.dto.Rate;
 
 public class DBConnect {
 	private static Connection Conn = null;
-	private Statement stmt = null;
+	private static Statement stmt = null;
 	private static String insQuery_1 = "insert into at_historical_daily(pk_id,symbol,low,high,close,open,volume,timestamp,change) values "
 			+ "(?,	?,	?,	?,	?,	?,	?,	?,	?)";
 	private static String selQuery_2 = "select pk_id,symbol,low,high,close,open,volume,timestamp,change from at_historical_daily d order by timestamp ;";
@@ -133,7 +133,7 @@ public class DBConnect {
 		return stmt;
 	}
 
-	public List<Rate> readRateFromDB(String Symbol) throws Exception {
+	public static List<Rate> readRateFromDB(String Symbol) throws Exception {
 		List<Rate> Series = new ArrayList<Rate>();
 		Rate previousRate = new Rate();
 		ResultSet rs = stmt.executeQuery(selQuery_2);

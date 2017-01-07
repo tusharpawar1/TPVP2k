@@ -174,4 +174,10 @@ public class Rate {
 				+ support3 + ", previousDayClose=" + previousDayClose + ", percChange=" + percChange + ", timestamp="
 				+ timestamp + "]";
 	}
+	public int getPkID() {
+		return pkID;
+	}
+	public double getPercChange() {
+		return percChange;
+	}
 }
