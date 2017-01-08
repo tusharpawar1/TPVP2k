@@ -1,9 +1,9 @@
-package org.pawars.algotrading;
+package org.tpvp2k.algotrading;
 
-import org.pawars.algotrading.connectivity.DBConnect;
-import org.pawars.algotrading.constants.Constant;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.tpvp2k.algotrading.connectivity.DBConnect;
+import org.tpvp2k.algotrading.constants.Constant;
 
 public class Dataloader {
 

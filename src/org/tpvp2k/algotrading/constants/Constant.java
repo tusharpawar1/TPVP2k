@@ -1,4 +1,4 @@
-package org.pawars.algotrading.constants;
+package org.tpvp2k.algotrading.constants;
 
 public class Constant {
 	public static final int DURATION_1MIN = 1;

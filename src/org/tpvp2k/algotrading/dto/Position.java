@@ -1,4 +1,4 @@
-package org.pawars.algotrading.dto;
+package org.tpvp2k.algotrading.dto;
 
 import java.util.Date;
 

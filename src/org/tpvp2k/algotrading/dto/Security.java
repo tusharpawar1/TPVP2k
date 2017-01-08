@@ -1,10 +1,10 @@
-package org.pawars.algotrading.dto;
+package org.tpvp2k.algotrading.dto;
 
 import java.util.Date;
 import java.util.List;
 
-import org.pawars.algotrading.connectivity.DBConnect;
-import org.pawars.algotrading.utilities.Utility;
+import org.tpvp2k.algotrading.connectivity.DBConnect;
+import org.tpvp2k.algotrading.utilities.Utility;
 
 
 
@@ -35,24 +35,63 @@ public class Security {
 	private double movingAvgDay100 = 0;
 	private double movingAvgDay200 = 0;
 	private double RSI14 =0;
+	private double STOCH_9_6 =0;
 	private List<Rate> RateSeries = null;
-	private Rate latestRate = null;
+	private Rate latestDailyRate = null;
 	private Date lastUpdatedTimestamp = null;
 	public Security(String Symbol) {
 		this.symbol = Symbol;
 		getRateList();
-		latestRate = RateSeries.get(RateSeries.size()-1);
-		populateValuesFromLatestRate(latestRate);
+		latestDailyRate = RateSeries.get(RateSeries.size()-1);
+		populateValuesFromLatestRate(latestDailyRate);
 		calculate52WHighandLow();
 		calculateMovingAvgs();
 		calculateRSI14();
+		calculateSTOCH96();
+	}
+
+	private void calculateSTOCH96() {
+		double max = 0;
+		double min = 999999999;
+		Rate rateTmp = latestDailyRate;
+		int iMasterDays = 0;
+		
+		double stoch = 0;
+		while(iMasterDays < 6){
+			int iDays = 9;
+
+			while(iDays > 0){
+				Double dblClose = rateTmp.getClose();
+				System.out.println("Current Rate close = " + rateTmp.getClose());
+				
+				if(max < dblClose){
+					max = dblClose;
+
+				}
+				if(min > dblClose){
+					min = dblClose;
+				}
+				iDays--;
+				rateTmp = rateTmp.getRefToPrevious();
+			}
+			rateTmp = latestDailyRate;
+			for(int i = 0; i < iMasterDays; i++){
+				rateTmp =  rateTmp.getRefToPrevious();
+			}
+			stoch =  stoch + ((rateTmp.getClose() - min)/(max -min) *100);
+			rateTmp = rateTmp.getRefToPrevious();
+			iMasterDays++;
+		}
+		STOCH_9_6 = stoch/iMasterDays;
+		
+		
 	}
 
 	private void calculateRSI14() {
 		double avgGain = 0;
 		double avgLoss = 0;
 		int iDays = 14;
-		Rate rateTmp = latestRate;
+		Rate rateTmp = latestDailyRate;
 		
 		while(iDays > 0){
 			
@@ -80,12 +119,12 @@ public class Security {
 	}
 
 	private void calculateMovingAvgs() {
-		movingAvgDay5 = Utility.convertDecimal(getLastNDaysClosingPrice(latestRate,5,0)/5);
-		movingAvgDay10 = Utility.convertDecimal(getLastNDaysClosingPrice(latestRate,10,0)/10);
-		movingAvgDay20 = Utility.convertDecimal(getLastNDaysClosingPrice(latestRate,20,0)/20);
-		movingAvgDay50 = Utility.convertDecimal(getLastNDaysClosingPrice(latestRate,50,0)/50);
-		movingAvgDay100 = Utility.convertDecimal(getLastNDaysClosingPrice(latestRate,100,0)/100);
-		movingAvgDay200 = Utility.convertDecimal(getLastNDaysClosingPrice(latestRate,200,0)/200);
+		movingAvgDay5 = Utility.convertDecimal(getLastNDaysClosingPrice(latestDailyRate,5,0)/5);
+		movingAvgDay10 = Utility.convertDecimal(getLastNDaysClosingPrice(latestDailyRate,10,0)/10);
+		movingAvgDay20 = Utility.convertDecimal(getLastNDaysClosingPrice(latestDailyRate,20,0)/20);
+		movingAvgDay50 = Utility.convertDecimal(getLastNDaysClosingPrice(latestDailyRate,50,0)/50);
+		movingAvgDay100 = Utility.convertDecimal(getLastNDaysClosingPrice(latestDailyRate,100,0)/100);
+		movingAvgDay200 = Utility.convertDecimal(getLastNDaysClosingPrice(latestDailyRate,200,0)/200);
 		
 	}
 
@@ -400,5 +439,9 @@ public class Security {
 
 	public double getRSI14() {
 		return Math.round(RSI14);
+	}
+
+	public double getSTOCH_9_6() {
+		return Math.round(STOCH_9_6);
 	}
 }

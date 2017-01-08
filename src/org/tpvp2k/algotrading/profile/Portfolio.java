@@ -1,9 +1,9 @@
-package org.pawars.algotrading.profile;
+package org.tpvp2k.algotrading.profile;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pawars.algotrading.dto.Position;
+import org.tpvp2k.algotrading.dto.Position;
 
 public class Portfolio {
 	private List<Position> positions = new ArrayList<Position>();

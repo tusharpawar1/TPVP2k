@@ -1,4 +1,4 @@
-package org.pawars.algotrading.utilities;
+package org.tpvp2k.algotrading.utilities;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.pawars.algotrading.connectivity.DBConnect;
-import org.pawars.algotrading.dto.Rate;
+import org.tpvp2k.algotrading.connectivity.DBConnect;
+import org.tpvp2k.algotrading.dto.Rate;
 
 public final class Utility {
 	static File file = null;

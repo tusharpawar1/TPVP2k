@@ -6,10 +6,10 @@
 
 	<!-- bean definitions here -->
 
-	<bean id="dbConn" class="org.pawars.algotrading.connectivity.DBConnect">
+	<bean id="dbConn" class="org.tpvp2k.algotrading.connectivity.DBConnect">
 
 	</bean>
-	<bean id="utils" class="org.pawars.algotrading.utilities.Utility">
+	<bean id="utils" class="org.tpvp2k.algotrading.utilities.Utility">
 		<property name="dbConn" ref="dbConn"></property>
 	</bean>
 </beans>

@@ -1,4 +1,4 @@
-package org.pawars.algotrading.connectivity;
+package org.tpvp2k.algotrading.connectivity;
 
 import org.apache.http.HttpHost;
 

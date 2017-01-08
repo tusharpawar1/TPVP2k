@@ -1,8 +1,8 @@
-package org.pawars.algotrading.dto;
+package org.tpvp2k.algotrading.dto;
 
 import java.util.Date;
 
-import org.pawars.algotrading.utilities.Utility;
+import org.tpvp2k.algotrading.utilities.Utility;
 
 public class Rate {
 	private int pkID = 0;

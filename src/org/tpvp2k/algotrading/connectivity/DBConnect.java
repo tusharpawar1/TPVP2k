@@ -1,4 +1,4 @@
-package org.pawars.algotrading.connectivity;
+package org.tpvp2k.algotrading.connectivity;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.pawars.algotrading.dto.Rate;
+import org.tpvp2k.algotrading.dto.Rate;
 
 public class DBConnect {
 	private static Connection Conn = null;
