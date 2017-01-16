@@ -8,7 +8,7 @@ import org.tpvp2k.algotrading.utilities.Utility;
 
 
 
-public class Security {
+public class Security implements Cloneable{
 	private String symbol = "NOT DEFINED";
 	private double currPrice = 0;
 	private String companyName = "";
@@ -38,10 +38,12 @@ public class Security {
 	private double STOCH_9_6 =0;
 	private List<Rate> RateSeries = null;
 	private Rate latestDailyRate = null;
+	private Rate firstDailyRate = null;
 	private Date lastUpdatedTimestamp = null;
 	public Security(String Symbol) {
 		this.symbol = Symbol;
 		getRateList();
+		firstDailyRate = RateSeries.get(0);
 		latestDailyRate = RateSeries.get(RateSeries.size()-1);
 		populateValuesFromLatestRate(latestDailyRate);
 		calculate52WHighandLow();
@@ -443,5 +445,9 @@ public class Security {
 
 	public double getSTOCH_9_6() {
 		return Math.round(STOCH_9_6);
+	}
+
+	public Rate getFirstDailyRate() {
+		return firstDailyRate;
 	}
 }

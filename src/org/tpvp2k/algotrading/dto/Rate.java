@@ -22,10 +22,11 @@ public class Rate {
 	private double percChange = 0;
 	private Date timestamp = null;
 	private Rate refToPrevious = null;
-	
+
 	public Rate() {
-	
+
 	}
+
 	public Rate(double low, double high, double close, double open, int volume, Date timestamp) {
 		this.low = low;
 		this.high = high;
@@ -33,9 +34,11 @@ public class Rate {
 		this.open = open;
 		this.volume = volume;
 		this.timestamp = timestamp;
-		
+
 	}
-	public Rate(double low, double high, double close, double open, int volume, Date timestamp, double percChange, Rate previousRate) {
+
+	public Rate(double low, double high, double close, double open, int volume, Date timestamp, double percChange,
+			Rate previousRate) {
 		this.low = low;
 		this.high = high;
 		this.close = close;
@@ -46,7 +49,9 @@ public class Rate {
 		this.refToPrevious = previousRate;
 		this.percChange = percChange;
 	}
-	public Rate(double low, double high, double close, double open, int volume, Date timestamp, double percChange, int PKID, Rate previousRate) {
+
+	public Rate(double low, double high, double close, double open, int volume, Date timestamp, double percChange,
+			int PKID, Rate previousRate) {
 		this.low = low;
 		this.high = high;
 		this.close = close;
@@ -58,6 +63,7 @@ public class Rate {
 		this.percChange = percChange;
 		this.pkID = PKID;
 	}
+
 	public double getLow() {
 		return low;
 	}
@@ -109,26 +115,25 @@ public class Rate {
 	public void calculate() {
 		pivot = (high + low + previousDayClose) / 3;
 		pivot = Utility.convertDecimal(pivot);
-		
+
 		resistance1 = (2 * pivot) - low;
 		resistance1 = Utility.convertDecimal(resistance1);
-		
+
 		support1 = (2 * pivot) - high;
-		support1 = Utility.convertDecimal(support1 );
-		
+		support1 = Utility.convertDecimal(support1);
+
 		resistance2 = pivot + (high - low);
-		resistance2 = Utility.convertDecimal(resistance2 );
-		
+		resistance2 = Utility.convertDecimal(resistance2);
+
 		support2 = pivot - (high - low);
-		support2 = Utility.convertDecimal(support2 );
-		
+		support2 = Utility.convertDecimal(support2);
+
 		resistance3 = high + 2 * (pivot - low);
-		resistance3 = Utility.convertDecimal(resistance3 );
-		
+		resistance3 = Utility.convertDecimal(resistance3);
+
 		support3 = low - 2 * (high - pivot);
-		support3 = Utility.convertDecimal(support3 );
-		
-		
+		support3 = Utility.convertDecimal(support3);
+
 	}
 
 	public double getPivot() {
@@ -166,6 +171,7 @@ public class Rate {
 	public Rate getRefToPrevious() {
 		return refToPrevious;
 	}
+
 	@Override
 	public String toString() {
 		return "Rate [low=" + low + ", high=" + high + ", close=" + close + ", open=" + open + ", volume=" + volume
@@ -174,10 +180,38 @@ public class Rate {
 				+ support3 + ", previousDayClose=" + previousDayClose + ", percChange=" + percChange + ", timestamp="
 				+ timestamp + "]";
 	}
+
 	public int getPkID() {
 		return pkID;
 	}
+
 	public double getPercChange() {
 		return percChange;
 	}
+
+	public double getOvernightAbsoluteGain() {
+
+		if (refToPrevious != null && refToPrevious.getClose() != 0) {
+
+			return getHigh() - refToPrevious.getClose();
+
+		} else
+			return 0;
+
+	}
+
+	public double getBreakEvenIntradayPrice() {
+		return (close + (close * (0.06 / 100)));
+	}
+
+	public double getBreakEvenDeliveryPrice() {
+		return (close + (close* (0.25 / 100)));
+	}
+	public double getOvernightMaxGainIntraday() {
+		return high - getBreakEvenIntradayPrice();
+	}
+	public double getOvernightMaxGainDelivery() {
+		return high - getBreakEvenDeliveryPrice();
+	}
+
 }

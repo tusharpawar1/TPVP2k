@@ -12,8 +12,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
+import org.tpvp2k.algotrading.dto.DoublyLinkedList;
 import org.tpvp2k.algotrading.dto.Rate;
 
 public class DBConnect {
@@ -134,7 +136,8 @@ public class DBConnect {
 	}
 
 	public static List<Rate> readRateFromDB(String Symbol) throws Exception {
-		List<Rate> Series = new ArrayList<Rate>();
+//		List<Rate> Series = new ArrayList<Rate>();
+		List<Rate> Series = new LinkedList<Rate>();
 		Rate previousRate = new Rate();
 		PreparedStatement pstmt = Conn.prepareStatement(selQuery_2);
 		pstmt.setString(1, Symbol);

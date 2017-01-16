@@ -11,6 +11,8 @@ import org.tpvp2k.algotrading.connectivity.DBConnect;
 import org.tpvp2k.algotrading.connectivity.MasterConnect;
 import org.tpvp2k.algotrading.dto.Rate;
 import org.tpvp2k.algotrading.dto.Security;
+import org.tpvp2k.algotrading.strategies.IntradayStrategy;
+import org.tpvp2k.algotrading.strategies.Strategy;
 
 public class MainClass {
 	
@@ -34,6 +36,8 @@ public class MainClass {
 
 			System.out.println(tmp.getW52HighLowDaysRatio());
 			System.out.println("---------------------------------");
+			Strategy intraStr = new IntradayStrategy(tmp);
+			intraStr.backTestStrategy();
 		}
 		
 		System.out.println("I am here");
